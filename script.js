@@ -15,10 +15,10 @@ import fs from 'fs/promises';
     await page.fill('#mobileNumber', phone);
     await page.click('#submitBtn');
 
-    console.log(Submitted for: ${phone});
+    console.log(`Submitted for: ${phone}`);  // ✅ تم التصحيح هنا
 
     await browser.close();
 
     await new Promise(res => setTimeout(res, 5 * 60 * 1000));
-  }
+  }
 })();
