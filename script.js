@@ -31,10 +31,10 @@ import path from 'path';
       await page.click('#submitBtn');
       console.log(`📤 إرسال: ${phone}`);
 
-      // ✅ الانتظار حتى ظهور النتيجة (بحد أقصى دقيقتين)
+      // ✅ الانتظار حتى ظهور النتيجة في div#result .alert-success أو .alert-warning (بحد أقصى دقيقتين)
       try {
-        await page.waitForSelector('#result .alert', { timeout: 2 * 60 * 1000 });
-        const resultText = await page.textContent('#result .alert');
+        await page.waitForSelector('#result .alert-success, #result .alert-warning', { timeout: 2 * 60 * 1000 });
+        const resultText = await page.textContent('#result .alert-success, #result .alert-warning');
 
         if (resultText.includes('Done') || resultText.includes('تم') || resultText.includes('בוצע')) {
           console.log(`✅ تم بنجاح: ${phone}`);
