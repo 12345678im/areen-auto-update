@@ -10,20 +10,15 @@ import fs from 'fs/promises';
 
     await page.goto('https://update.areen.net/', { waitUntil: 'networkidle' });
 
-    // انتظر حتى يظهر حقل رقم الجوال الصحيح
     await page.waitForSelector('#mobileNumber', { timeout: 30000 });
 
-    // أدخل الرقم
     await page.fill('#mobileNumber', phone);
-
-    // اضغط زر الإرسال
     await page.click('#submitBtn');
 
     console.log(Submitted for: ${phone});
 
     await browser.close();
 
-    // انتظر 5 دقائق
     await new Promise(res => setTimeout(res, 5 * 60 * 1000));
   }
 })();
