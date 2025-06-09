@@ -15,7 +15,8 @@ import fs from 'fs/promises';
     await page.fill('#mobileNumber', phone);
     await page.click('#submitBtn');
 
-    console.log(`Submitted for: ${phone}`);  // ✅ تم التصحيح هنا
+    // ✅ تم إصلاح الخطأ هنا باستخدام backticks
+    console.log(`Submitted for: ${phone}`);
 
     await browser.close();
 
