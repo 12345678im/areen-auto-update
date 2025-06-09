@@ -19,7 +19,6 @@ import fs from 'fs/promises';
 
     await browser.close();
 
-    // انتظر 5 دقائق قبل إرسال الرقم التالي
     await new Promise(res => setTimeout(res, 5 * 60 * 1000));
   }
 })();
