@@ -22,5 +22,8 @@ jobs:
         run: |
           npm install playwright
 
+      - name: Install Playwright Browsers
+        run: npx playwright install
+
       - name: Run script
         run: node script.js
