@@ -3,7 +3,7 @@ name: Auto Submit Areen
 on:
   schedule:
     - cron: '0 */12 * * *'  # كل 12 ساعة
-  workflow_dispatch:        # لتشغيله يدويًا أيضًا
+  workflow_dispatch:
 
 jobs:
   run-script:
@@ -27,3 +27,17 @@ jobs:
 
       - name: Run script
         run: node script.js
+
+      - name: Upload success artifact
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: success-numbers
+          path: success.txt
+
+      - name: Upload failed artifact
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: failed-numbers
+          path: failed.txt
