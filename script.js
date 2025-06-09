@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const fs = require('fs/promises');
+import fs from 'fs/promises';
 
 (async () => {
   const phones = (await fs.readFile('phones.txt', 'utf8')).split('\n').filter(Boolean);
@@ -19,6 +19,7 @@ const fs = require('fs/promises');
 
     await browser.close();
 
+    // انتظر 5 دقائق قبل إرسال الرقم التالي
     await new Promise(res => setTimeout(res, 5 * 60 * 1000));
   }
 })();
