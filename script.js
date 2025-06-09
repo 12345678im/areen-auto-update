@@ -31,8 +31,9 @@ import path from 'path';
       await page.click('#submitBtn');
       console.log(`📤 إرسال: ${phone}`);
 
+      // ✅ الانتظار حتى ظهور النتيجة (بحد أقصى دقيقتين)
       try {
-        await page.waitForSelector('#result .alert', { timeout: 10000 });
+        await page.waitForSelector('#result .alert', { timeout: 2 * 60 * 1000 });
         const resultText = await page.textContent('#result .alert');
 
         if (resultText.includes('Done') || resultText.includes('تم') || resultText.includes('בוצע')) {
@@ -44,7 +45,7 @@ import path from 'path';
         }
 
       } catch (error) {
-        console.error(`❌ لم تظهر رسالة النجاح: ${phone}`);
+        console.error(`❌ لم تظهر نتيجة خلال دقيقتين: ${phone}`);
         await fs.appendFile(failedPath, phone + '\n');
       }
 
@@ -54,9 +55,6 @@ import path from 'path';
     }
 
     await page.close();
-
-    // الانتظار 5 دقائق قبل الرقم التالي (يمكن تعديل الوقت حسب الحاجة)
-    await new Promise(res => setTimeout(res, 5 * 60 * 1000));
   }
 
   await browser.close();
