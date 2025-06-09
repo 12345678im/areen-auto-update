@@ -11,14 +11,16 @@ import fs from 'fs/promises';
 
     await page.goto('https://update.areen.net/');
 
-    await page.fill('input[name="mobile"]', phone);
+    // ✅ انتظار العنصر قبل ملئه
+    await page.waitForSelector('input[name="mobile"]', { timeout: 30000 });
 
+    await page.fill('input[name="mobile"]', phone);
     await page.click('button[type="submit"]');
 
     console.log(`Submitted for: ${phone}`);
 
     await browser.close();
 
-    await new Promise(res => setTimeout(res, 5 * 60 * 1000));
+    await new Promise(res => setTimeout(res, 5 * 60 * 1000)); // 5 دقائق
   }
 })();
