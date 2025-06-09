@@ -6,21 +6,24 @@ import fs from 'fs/promises';
 
   for (const phone of phones) {
     const browser = await chromium.launch();
-    const context = await browser.newContext();
-    const page = await context.newPage();
+    const page = await browser.newPage();
 
-    await page.goto('https://update.areen.net/');
+    await page.goto('https://update.areen.net/', { waitUntil: 'networkidle' });
 
-    // ✅ انتظار العنصر قبل ملئه
-    await page.waitForSelector('input[name="mobile"]', { timeout: 30000 });
+    // انتظر حتى يظهر حقل رقم الجوال الصحيح
+    await page.waitForSelector('#mobileNumber', { timeout: 30000 });
 
-    await page.fill('input[name="mobile"]', phone);
-    await page.click('button[type="submit"]');
+    // أدخل الرقم
+    await page.fill('#mobileNumber', phone);
 
-    console.log(`Submitted for: ${phone}`);
+    // اضغط زر الإرسال
+    await page.click('#submitBtn');
+
+    console.log(Submitted for: ${phone});
 
     await browser.close();
 
-    await new Promise(res => setTimeout(res, 5 * 60 * 1000)); // 5 دقائق
-  }
+    // انتظر 5 دقائق
+    await new Promise(res => setTimeout(res, 5 * 60 * 1000));
+  }
 })();
