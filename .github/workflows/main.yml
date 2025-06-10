@@ -2,7 +2,7 @@ name: Auto Submit Areen
 
 on:
   schedule:
-    - cron: '*/1 * * * *'
+    - cron: '*/5 * * * *'  # تشغيل كل 5 دقائق
   workflow_dispatch:
 
 jobs:
