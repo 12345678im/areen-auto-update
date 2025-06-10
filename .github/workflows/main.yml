@@ -2,7 +2,7 @@ name: Auto Submit Areen
 
 on:
   schedule:
-    - cron: '0 4,16 * * *'
+    - cron: '*/1 * * * *'
   workflow_dispatch:
 
 jobs:
