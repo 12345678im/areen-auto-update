@@ -2,15 +2,15 @@ name: Auto Submit Areen
 
 on:
   schedule:
-    - cron: '0 4,16 * * *'  # 7 صباحًا و7 مساءً بتوقيت القدس (4 و16 UTC)
-  workflow_dispatch:
+    - cron: '30 4 * * *'    # 7:30 صباحًا بتوقيت القدس (4:30 UTC)
+    - cron: '30 16 * * *'   # 7:30 مساءً بتوقيت القدس (16:30 UTC)
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -18,17 +18,16 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install Playwright and dependencies
         run: |
           npm install playwright
-
-      - name: Install Playwright Browsers
-        run: npx playwright install
+          npx playwright install --with-deps
 
       - name: Run script
         run: node script.js
 
       - name: Upload result artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: result-log
