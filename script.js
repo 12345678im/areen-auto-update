@@ -5,9 +5,7 @@ import path from 'path';
 (async () => {
   const phones = (await fs.readFile('phones.txt', 'utf8')).split('\n').filter(Boolean);
 
-  const successPath = path.resolve('success.txt');
-  const failedPath = path.resolve('failed.txt');
-
+  const resultPath = path.resolve('result.txt');
   const browser = await chromium.launch();
 
   for (const phone of phones) {
@@ -21,8 +19,9 @@ import path from 'path';
 
       const value = await page.inputValue('#mobileNumber');
       if (value !== phone) {
-        console.error(`❌ لم يتم إدخال الرقم بشكل صحيح: ${phone}`);
-        await fs.appendFile(failedPath, phone + '\n');
+        const msg = `❌ لم يتم إدخال الرقم بشكل صحيح`;
+        console.error(`${msg}: ${phone}`);
+        await fs.appendFile(resultPath, `${phone} → ${msg}\n`);
         await page.close();
         continue;
       }
@@ -31,27 +30,30 @@ import path from 'path';
       await page.click('#submitBtn');
       console.log(`📤 إرسال: ${phone}`);
 
-      // ✅ الانتظار حتى ظهور النتيجة في div#result .alert-success أو .alert-warning (بحد أقصى دقيقتين)
       try {
         await page.waitForSelector('#result .alert-success, #result .alert-warning', { timeout: 2 * 60 * 1000 });
         const resultText = await page.textContent('#result .alert-success, #result .alert-warning');
 
         if (resultText.includes('Done') || resultText.includes('تم') || resultText.includes('בוצע')) {
-          console.log(`✅ تم بنجاح: ${phone}`);
-          await fs.appendFile(successPath, phone + '\n');
+          const msg = `✅ تم بنجاح`;
+          console.log(`${msg}: ${phone}`);
+          await fs.appendFile(resultPath, `${phone} → ${msg}\n`);
         } else {
-          console.warn(`⚠️ رسالة غير متوقعة: ${phone} → ${resultText}`);
-          await fs.appendFile(failedPath, phone + '\n');
+          const msg = `⚠️ رسالة غير متوقعة: ${resultText.trim()}`;
+          console.warn(`${msg}: ${phone}`);
+          await fs.appendFile(resultPath, `${phone} → ${msg}\n`);
         }
 
       } catch (error) {
-        console.error(`❌ لم تظهر نتيجة خلال دقيقتين: ${phone}`);
-        await fs.appendFile(failedPath, phone + '\n');
+        const msg = `❌ لم تظهر نتيجة خلال دقيقتين`;
+        console.error(`${msg}: ${phone}`);
+        await fs.appendFile(resultPath, `${phone} → ${msg}\n`);
       }
 
     } catch (err) {
-      console.error(`❌ فشل في معالجة الرقم: ${phone} | الخطأ: ${err.message}`);
-      await fs.appendFile(failedPath, phone + '\n');
+      const msg = `❌ فشل في المعالجة | الخطأ: ${err.message}`;
+      console.error(`${msg}: ${phone}`);
+      await fs.appendFile(resultPath, `${phone} → ${msg}\n`);
     }
 
     await page.close();
