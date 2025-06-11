@@ -1,8 +1,8 @@
 name: Auto Submit Areen
 
 on:
-  schedule:
-    - cron: '0 */8 * * *'  # تشغيل كل 8 ساعات بتوقيت UTC
+    schedule:
+    - cron: '0 4,16 * * *'  # تشغيل الساعة 7 صباحًا و7 مساءً بتوقيت القدس (UTC+3)
   workflow_dispatch:
 
 jobs:
